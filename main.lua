@@ -18,7 +18,7 @@ end
 
 local function entry()
 	local cwd = get_cwd()
-ya.emit("cd", { cwd })
+	ya.emit("cd", { cwd })
 end
 
 return { entry = entry, setup = setup }
