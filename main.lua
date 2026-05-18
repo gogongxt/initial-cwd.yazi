@@ -1,14 +1,24 @@
 --- @sync entry
 
 local get_cwd = ya.sync(function(st)
-	if not st.initial_cwd then
-		st.initial_cwd = tostring(cx.active.current.cwd)
-	end
 	return st.initial_cwd
 end)
 
-local function entry()
-	ya.emit("cd", { get_cwd() })
+local set_cwd = ya.sync(function(st)
+	if not st.initial_cwd then
+		st.initial_cwd = tostring(cx.active.current.cwd)
+	end
+end)
+
+local function setup()
+	ps.sub("cd", function()
+		set_cwd()
+	end)
 end
 
-return { entry = entry }
+local function entry()
+	local cwd = get_cwd()
+ya.emit("cd", { cwd })
+end
+
+return { entry = entry, setup = setup }
