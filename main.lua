@@ -1,11 +1,14 @@
 --- @sync entry
 
-local initial_cwd = os.getenv("PWD")
+local get_cwd = ya.sync(function(st)
+	if not st.initial_cwd then
+		st.initial_cwd = tostring(cx.active.current.cwd)
+	end
+	return st.initial_cwd
+end)
 
 local function entry()
-	if initial_cwd then
-		ya.emit("cd", { initial_cwd })
-	end
+	ya.emit("cd", { get_cwd() })
 end
 
 return { entry = entry }
